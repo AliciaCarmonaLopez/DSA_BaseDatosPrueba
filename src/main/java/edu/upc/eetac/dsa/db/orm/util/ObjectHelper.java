@@ -2,6 +2,7 @@ package edu.upc.eetac.dsa.db.orm.util;
 
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,17 +24,19 @@ public class ObjectHelper {
 
     }
     public static void setter(Object object, String property, Object value) {
-        // Method // invoke
         String propToUppercase = property.substring(0, 1).toUpperCase() + property.substring(1);
         String setterName = "set" + propToUppercase;
-        try {
-            Method m = object.getClass().getDeclaredMethod(setterName);
-            m.invoke(object, value);
 
-        }catch (NoSuchMethodException e){
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        try {
+            Method m = object.getClass().getMethod(setterName, value.getClass());
+
+            m.invoke(object, value);
+        } catch (NoSuchMethodException e) {
+            System.out.println("No such method: " + setterName);
+        } catch (IllegalAccessException e) {
+            System.out.println("Illegal access: " + setterName);
+        } catch (InvocationTargetException e) {
+            System.out.println("Invocation target exception: " + setterName);
         }
     }
 

@@ -49,7 +49,7 @@ public class DBJDBC2 extends DBJDBC{
         Session s = new SessionImpl(conn);
         s.save(u);
 
-        User u2 = (User) s.get(User.class, "idUser", "1");
+        User u2 = (User) s.get(User.class, "idUser", "12f");
         System.out.println(u2.getUserName());
 
         /* u.userName("Juan");
