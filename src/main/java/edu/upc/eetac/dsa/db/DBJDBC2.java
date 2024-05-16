@@ -5,6 +5,7 @@ import edu.upc.eetac.dsa.db.orm.SessionImpl;
 import edu.upc.eetac.dsa.db.orm.model.User;
 
 import java.sql.*;
+import java.util.List;
 
 import static edu.upc.eetac.dsa.db.DBUtils.getConnection;
 
@@ -51,6 +52,12 @@ public class DBJDBC2 extends DBJDBC{
 
         User u2 = (User) s.get(User.class, "idUser", "12f");
         System.out.println(u2.getUserName());
+
+        List<User> lu = s.findAll(User.class);
+        for (User user: lu) {
+            System.out.println(user.getUserName());
+        }
+
 
         /* u.userName("Juan");
         s.update(u); ====> "UPDATE xxx"

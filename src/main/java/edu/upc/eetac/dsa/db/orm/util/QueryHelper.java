@@ -45,15 +45,9 @@ public class QueryHelper {
     }
 
 
-    public static String createSelectFindAll(Class theClass, HashMap<String, String> params) {
-
-        Set<Map.Entry<String, String>> set = params.entrySet();
-
-        StringBuffer sb = new StringBuffer("SELECT * FROM "+theClass.getSimpleName()+" WHERE 1=1");
-        for (String key: params.keySet()) {
-            sb.append(" AND "+key+"=?");
-        }
-
+    public static String createQuerySELECTall(Class theClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
 
         return sb.toString();
     }

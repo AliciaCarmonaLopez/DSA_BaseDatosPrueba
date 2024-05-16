@@ -6,6 +6,7 @@ import edu.upc.eetac.dsa.db.orm.util.QueryHelper;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -113,7 +114,34 @@ public class SessionImpl implements Session {
     }
 
     public List<Object> findAll(Class theClass) {
-        return null;
+        String query = QueryHelper.createQuerySELECTall(theClass);
+        PreparedStatement pstm = null;
+        ResultSet rs;
+        List<Object> list = new LinkedList<>();
+        try {
+            pstm = conn.prepareStatement(query);
+            pstm.executeQuery();
+            rs = pstm.getResultSet();
+
+            ResultSetMetaData metadata = rs.getMetaData();
+            int numberOfColumns = metadata.getColumnCount();
+
+            while (rs.next()){
+                Object o = theClass.newInstance();
+                for (int j=1; j<=numberOfColumns; j++){
+                    String columnName = metadata.getColumnName(j);
+                    ObjectHelper.setter(o, columnName, rs.getObject(j));
+                }
+                list.add(o);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public List<Object> findAll(Class theClass, HashMap params) {
