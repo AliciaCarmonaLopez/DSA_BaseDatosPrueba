@@ -3,6 +3,8 @@ package edu.upc.eetac.dsa.db.orm;
 import edu.upc.eetac.dsa.db.orm.model.Employee;
 import org.junit.Test;
 
+import java.sql.SQLException;
+
 public class ORMTest {
 
 
@@ -22,14 +24,14 @@ public class ORMTest {
     }
 
     @Test
-    public void loginTest() {
+    public void loginTest() throws SQLException {
         String url = "127.0.0.1";
         String user = "root";
         String password = "1234";
 
         Session session = FactorySession.openSession(url, user, password);
-        Employee e = (Employee)session.get(Employee.class, "idXXX");
-        Employee e = (Employee)session.get(Employee.class, "email", "toni@upc.edu");
+       // Employee e = (Employee)session.get(Employee.class, "idXXX");
+        //Employee e = (Employee)session.get(Employee.class, "email", "toni@upc.edu");
 
 
 

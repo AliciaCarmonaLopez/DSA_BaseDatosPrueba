@@ -1,8 +1,8 @@
 package edu.upc.eetac.dsa.db.orm;
 
-import edu.upc.eetac.dsa.db.orm.Session;
-import edu.upc.eetac.dsa.util.ObjectHelper;
-import edu.upc.eetac.dsa.util.QueryHelper;
+import edu.upc.eetac.dsa.db.orm.model.User;
+import edu.upc.eetac.dsa.db.orm.util.ObjectHelper;
+import edu.upc.eetac.dsa.db.orm.util.QueryHelper;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class SessionImpl implements Session {
         try {
             pstm = conn.prepareStatement(insertQuery);
             pstm.setObject(1, 0);
-            int i = 2;
+            int i = 1;
 
             for (String field: ObjectHelper.getFields(entity)) {
                 pstm.setObject(i++, ObjectHelper.getter(entity, field));
@@ -50,12 +50,35 @@ public class SessionImpl implements Session {
     }
 
     @Override
-    public Object get(Class theClass, Object ID) {
-        return null;
-    }
+    public Object get(Class theClass, String column, Object entity) throws SQLException, NoSuchFieldException, IllegalAccessException, InstantiationException {
+        String selectQuery = QueryHelper.createQuerySELECT(theClass, column);
+        PreparedStatement pstm = null;
+        pstm = conn.prepareStatement(selectQuery);
+        pstm.setObject(1, entity);
+        ResultSet rs = pstm.executeQuery();
 
-    public Object get(Class theClass, int ID) {
+        Object o = theClass.newInstance();
+
+        if (!rs.next()) {
+            // No records found
+            o = null;
+        } else{
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+
+            do {
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    String columnName = rsmd.getColumnName(i);
+                    ObjectHelper.setter(o, columnName, rs.getObject(i));
+                }
+            } while (rs.next());
+        }
+
+        return o;
+    }
 /*
+    public Object get(Class theClass, int ID) {
+
         String sql = QueryHelper.createQuerySELECT(theClass);
 
         Object o = theClass.newInstance();
@@ -76,9 +99,10 @@ public class SessionImpl implements Session {
 
         }
 
-*/
+
         return null;
     }
+    */
 
     public void update(Object object) {
 

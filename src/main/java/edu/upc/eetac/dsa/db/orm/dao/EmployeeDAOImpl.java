@@ -36,7 +36,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
         Employee employee = null;
         try {
             session = FactorySession.openSession();
-            employee = (Employee)session.get(Employee.class, employeeID);
+            //employee = (Employee)session.get(Employee.class, employeeID);
         }
         catch (Exception e) {
             // LOG

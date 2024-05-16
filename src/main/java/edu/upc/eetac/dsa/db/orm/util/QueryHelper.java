@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa.util;
+package edu.upc.eetac.dsa.db.orm.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,26 +12,34 @@ public class QueryHelper {
         sb.append(entity.getClass().getSimpleName()).append(" ");
         sb.append("(");
 
-        String [] fields = edu.upc.eetac.dsa.util.ObjectHelper.getFields(entity);
+        String [] fields = edu.upc.eetac.dsa.db.orm.util.ObjectHelper.getFields(entity);
 
-        sb.append("ID");
+        sb.append("idUser");
         for (String field: fields) {
-            if (!field.equals("ID")) sb.append(", ").append(field);
+            if (!field.equals("idUser")) sb.append(", ").append(field);
         }
         sb.append(") VALUES (?");
 
         for (String field: fields) {
-            if (!field.equals("ID"))  sb.append(", ?");
+            if (!field.equals("idUser"))  sb.append(", ?");
         }
         sb.append(")");
         // INSERT INTO User (ID, lastName, firstName, address, city) VALUES (0, ?, ?, ?,?)
         return sb.toString();
     }
 
-    public static String createQuerySELECT(Object entity) {
+    /*public static String createQuerySELECT(Object entity) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(entity.getClass().getSimpleName());
         sb.append(" WHERE ID = ?");
+
+        return sb.toString();
+    }
+     */
+    public static String createQuerySELECT(Class theClass, String columna) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+        sb.append(" WHERE " + columna + " = ?");
 
         return sb.toString();
     }
